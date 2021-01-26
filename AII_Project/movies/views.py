@@ -100,7 +100,16 @@ def imdb_search_rating(request):
 
 def imdb_search_all(request):
     if request.method == "POST":
-        return render(request, 'whoosh.html', {'result':'All'})
+        ix=open_dir("Index")
+        with ix.searcher() as searcher:
+            query = MultifieldParser(["title","year","rating"], ix.schema, group=OrGroup).parse(str(request.POST.get('all')))
+            results = searcher.search(query, limit=25) # Solo devuelve los 25 primeros
+            result = str()
+            for r in results:
+                result = result + 'Title: '+r['title'] + ', Year: '+str(r['year']) + ', Rating: '+str(r['rating']) + '|'
+            res = result.split("|")
+            res = res[:-1]
+        return render(request, 'whoosh.html', {'result':res})
     return render(request, 'whoosh.html')
 
 def almacenar_datos():

@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from movies.views import imdb_scrape
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('movies/', imdb_scrape, name="imdb_scrape")
 ]

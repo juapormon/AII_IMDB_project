@@ -77,35 +77,31 @@ def imdb_search_all(request):
     return render(request, 'whoosh.html')
 
 def almacenar_datos():
-    #define el esquema de la información
+    # Define el esquema de la información
     schem = Schema(title=TEXT(stored=True), year=NUMERIC(stored=True), rating=NUMERIC(stored=True))
-    
-    #eliminamos el directorio del Ã­ndice, si existe
+    # Eliminamos el directorio del Indice, si existe
     if os.path.exists("Index"):
         shutil.rmtree("Index")
     os.mkdir("Index")
-    
-    #creamos el Indice
+    # Creamos el Indice
     ix = create_in("Index", schema=schem)
-    #creamos un writer para poder añadir documentos al indice
+    # Creamos un writer para poder añadir documentos al indice
     writer = ix.writer()
     i=0
     lista=extraer_peliculas()
     for pelicula in lista:
-        #añade cada pelicula de la lista al índice
+        # Añade cada pelicula de la lista al índice
         writer.add_document(title=str(pelicula['title']), year=int(pelicula['year']), rating=float(pelicula['rating']))    
         i+=1
     writer.commit()
-    print("Fin de indexado", "Se han indexado "+str(i)+" peli­culas")    
+    print('Fin de indexado.', 'Se han indexado ' + str(i) + ' peli­culas')
 
 def extraer_peliculas():
     result = []
-
     with open("tv_shows.csv",'r') as csvfile:
         reader = csv.reader(csvfile,delimiter=',')
         next(reader, None)
         for row in reader:
-            year = row[1].replace("(","").replace(")","") #mapear el año porque viene entre parentesis
+            year = row[1].replace("(","").replace(")","") # Mapear el año porque viene entre parentesis
             result.append({'title':row[0],'year':year,'rating':row[2]})
-
     return result

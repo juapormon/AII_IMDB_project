@@ -47,3 +47,8 @@ def imdb_scrape(request):
         return render(request, 'bs.html', {'result':'The database has been loaded successfully!'})
     
     return render(request, 'bs.html')
+
+def imdb_search(request):
+    if request.method == "POST":
+        return render(request, 'whoosh.html', {'result':''})
+    return render(request, 'whoosh.html')

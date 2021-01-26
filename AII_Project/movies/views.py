@@ -62,11 +62,10 @@ def imdb_search_title(request):
         with ix.searcher() as searcher:
             query = QueryParser("title", ix.schema).parse(str(request.POST.get('title')))
             results = searcher.search(query, limit=25) #devuelve los 25 primeros
-
+            result = ''
             for r in results:
-
-                
-        return render(request, 'whoosh.html', {'result':results})
+                result = result + 'Title: '+r['title'] + ', Year: '+str(r['year']) + ', Rating: '+str(r['rating']) + '\n'
+        return render(request, 'whoosh.html', {'result':result})
     return render(request, 'whoosh.html')
 
 def imdb_search_year(request):

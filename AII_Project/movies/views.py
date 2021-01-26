@@ -96,7 +96,7 @@ def almacenar_datos():
         writer.add_document(title=str(pelicula[0]), year=int(pelicula[1]), rating=int(pelicula[2]))    
         i+=1
     writer.commit()
-    print("Fin de indexado", "Se han indexado "+str(i)+ " peli­culas")    
+    print("Fin de indexado", "Se han indexado "+str(i)+" peli­culas")    
 
 def extraer_peliculas():
     result = []
@@ -105,7 +105,7 @@ def extraer_peliculas():
         reader = csv.reader(csvfile,delimiter=',')
         next(reader, None)
         for row in reader:
-            row[1].replace("(","").replace(")","") #mapear el año porque viene entre parentesis
-            result.append({'title':row[0],'year':row[1],'rating':row[2]})
+            year = row[1].replace("(","").replace(")","") #mapear el año porque viene entre parentesis
+            result.append({'title':row[0],'year':year,'rating':row[2]})
 
     return result

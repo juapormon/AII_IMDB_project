@@ -110,7 +110,7 @@
         <form action="{% url 'imdb_search_year' %}" method="POST">
             {% csrf_token %}
             <label>Year search</label>
-            <input type="text" name="year" placeholder="Film year" />
+            <input type="number" name="year" placeholder="Film year" />
             <input type="submit" name="submit" value="submit" />
         </form>
 
@@ -119,7 +119,7 @@
         <form action="{% url 'imdb_search_rating' %}" method="POST">
             {% csrf_token %}
             <label>Rating search</label>
-            <input type="text" name="rating" placeholder="Film rating" />
+            <input type="number" step="0.1" min="0" max="10" name="rating" placeholder="Film rating" />
             <input type="submit" name="submit" value="submit" />
         </form>
 
@@ -128,7 +128,7 @@
         <form action="{% url 'imdb_search_all' %}" method="POST">
             {% csrf_token %}
             <label>All search</label>
-            <input type="text" name="whoosh" placeholder="Search parameter" />
+            <input type="text" name="all" placeholder="Search parameter" />
             <input type="submit" name="submit" value="submit" />
         </form>
 

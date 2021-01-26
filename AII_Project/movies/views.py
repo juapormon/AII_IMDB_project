@@ -61,21 +61,35 @@ def imdb_search_title(request):
         ix=open_dir("Index")
         with ix.searcher() as searcher:
             query = QueryParser("title", ix.schema).parse(str(request.POST.get('title')))
-            results = searcher.search(query, limit=25) #devuelve los 25 primeros
-            result = ''
+            results = searcher.search(query, limit=25) # Solo devuelve los 25 primeros
+            result = str()
             for r in results:
-                result = result + 'Title: '+r['title'] + ', Year: '+str(r['year']) + ', Rating: '+str(r['rating']) + '\n'
+                result = result + 'Title: '+r['title'] + ', Year: '+str(r['year']) + ', Rating: '+str(r['rating'])
         return render(request, 'whoosh.html', {'result':result})
     return render(request, 'whoosh.html')
 
 def imdb_search_year(request):
     if request.method == "POST":
-        return render(request, 'whoosh.html', {'result':'Year'})
+        ix=open_dir("Index")
+        with ix.searcher() as searcher:
+            query = QueryParser("year", ix.schema).parse(str(request.POST.get('year')))
+            results = searcher.search(query, limit=25) # Solo devuelve los 25 primeros
+            result = str()
+            for r in results:
+                result = result + 'Title: '+r['title'] + ', Year: '+str(r['year']) + ', Rating: '+str(r['rating'])
+        return render(request, 'whoosh.html', {'result':result})
     return render(request, 'whoosh.html')
 
 def imdb_search_rating(request):
     if request.method == "POST":
-        return render(request, 'whoosh.html', {'result':'Rating'})
+        ix=open_dir("Index")
+        with ix.searcher() as searcher:
+            query = QueryParser("rating", ix.schema).parse(str(request.POST.get('rating')))
+            results = searcher.search(query, limit=25) # Solo devuelve los 25 primeros
+            result = str()
+            for r in results:
+                result = result + 'Title: '+r['title'] + ', Year: '+str(r['year']) + ', Rating: '+str(r['rating'])
+        return render(request, 'whoosh.html', {'result':result})
     return render(request, 'whoosh.html')
 
 def imdb_search_all(request):
@@ -85,7 +99,7 @@ def imdb_search_all(request):
 
 def almacenar_datos():
     # Define el esquema de la información
-    schem = Schema(title=TEXT(stored=True), year=NUMERIC(stored=True), rating=NUMERIC(stored=True))
+    schem = Schema(title=TEXT(stored=True), year=NUMERIC(stored=True), rating=TEXT(stored=True))
     # Eliminamos el directorio del Indice, si existe
     if os.path.exists("Index"):
         shutil.rmtree("Index")
@@ -98,7 +112,7 @@ def almacenar_datos():
     lista=extraer_peliculas()
     for pelicula in lista:
         # Añade cada pelicula de la lista al índice
-        writer.add_document(title=str(pelicula['title']), year=int(pelicula['year']), rating=float(pelicula['rating']))    
+        writer.add_document(title=str(pelicula['title']), year=int(pelicula['year']), rating=str(pelicula['rating']))    
         i+=1
     writer.commit()
     print('Fin de indexado.', 'Se han indexado ' + str(i) + ' peli­culas')

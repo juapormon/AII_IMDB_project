@@ -19,5 +19,5 @@ from movies.views import imdb_scrape
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('movies/', imdb_scrape, name="imdb_scrape")
+    path('imdb_scrape/', imdb_scrape, name="imdb_scrape")
 ]

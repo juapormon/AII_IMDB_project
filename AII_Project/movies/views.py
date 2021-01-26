@@ -1,7 +1,11 @@
+import re, os, shutil
 from django.shortcuts import render
 import requests
 from bs4 import BeautifulSoup
 import csv
+from whoosh.index import create_in,open_dir
+from whoosh.fields import Schema, TEXT, NUMERIC
+from whoosh.qparser import QueryParser, MultifieldParser, OrGroup
 
 # Create your views here.
 def imdb_scrape(request):
@@ -49,6 +53,7 @@ def imdb_scrape(request):
     return render(request, 'bs.html')
 
 def imdb_search(request):
+    almacenar_datos()
     return render(request, 'whoosh.html')
 
 def imdb_search_title(request):
@@ -70,3 +75,37 @@ def imdb_search_all(request):
     if request.method == "POST":
         return render(request, 'whoosh.html', {'result':'All'})
     return render(request, 'whoosh.html')
+
+def almacenar_datos():
+    #define el esquema de la información
+    schem = Schema(title=TEXT(stored=True), year=NUMERIC(stored=True), rating=NUMERIC(stored=True))
+    
+    #eliminamos el directorio del Ã­ndice, si existe
+    if os.path.exists("Index"):
+        shutil.rmtree("Index")
+    os.mkdir("Index")
+    
+    #creamos el Indice
+    ix = create_in("Index", schema=schem)
+    #creamos un writer para poder añadir documentos al indice
+    writer = ix.writer()
+    i=0
+    lista=extraer_peliculas()
+    for pelicula in lista:
+        #añade cada pelicula de la lista al índice
+        writer.add_document(title=str(pelicula[0]), year=int(pelicula[1]), rating=int(pelicula[2]))    
+        i+=1
+    writer.commit()
+    print("Fin de indexado", "Se han indexado "+str(i)+ " peli­culas")    
+
+def extraer_peliculas():
+    result = []
+
+    with open("tv_shows.csv",'r') as csvfile:
+        reader = csv.reader(csvfile,delimiter=',')
+        next(reader, None)
+        for row in reader:
+            row[1].replace("(","").replace(")","") #mapear el año porque viene entre parentesis
+            result.append({'title':row[0],'year':row[1],'rating':row[2]})
+
+    return result

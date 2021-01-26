@@ -58,7 +58,15 @@ def imdb_search(request):
 
 def imdb_search_title(request):
     if request.method == "POST":
-        return render(request, 'whoosh.html', {'result':'Title'})
+        ix=open_dir("Index")
+        with ix.searcher() as searcher:
+            query = QueryParser("title", ix.schema).parse(str(request.POST.get('title')))
+            results = searcher.search(query, limit=25) #devuelve los 25 primeros
+
+            for r in results:
+
+                
+        return render(request, 'whoosh.html', {'result':results})
     return render(request, 'whoosh.html')
 
 def imdb_search_year(request):

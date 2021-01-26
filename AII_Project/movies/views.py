@@ -49,6 +49,24 @@ def imdb_scrape(request):
     return render(request, 'bs.html')
 
 def imdb_search(request):
+    return render(request, 'whoosh.html')
+
+def imdb_search_title(request):
     if request.method == "POST":
-        return render(request, 'whoosh.html', {'result':''})
+        return render(request, 'whoosh.html', {'result':'Title'})
+    return render(request, 'whoosh.html')
+
+def imdb_search_year(request):
+    if request.method == "POST":
+        return render(request, 'whoosh.html', {'result':'Year'})
+    return render(request, 'whoosh.html')
+
+def imdb_search_rating(request):
+    if request.method == "POST":
+        return render(request, 'whoosh.html', {'result':'Rating'})
+    return render(request, 'whoosh.html')
+
+def imdb_search_all(request):
+    if request.method == "POST":
+        return render(request, 'whoosh.html', {'result':'All'})
     return render(request, 'whoosh.html')

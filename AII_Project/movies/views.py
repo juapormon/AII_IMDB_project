@@ -93,7 +93,7 @@ def almacenar_datos():
     lista=extraer_peliculas()
     for pelicula in lista:
         #añade cada pelicula de la lista al índice
-        writer.add_document(title=str(pelicula[0]), year=int(pelicula[1]), rating=int(pelicula[2]))    
+        writer.add_document(title=str(pelicula['title']), year=int(pelicula['year']), rating=float(pelicula['rating']))    
         i+=1
     writer.commit()
     print("Fin de indexado", "Se han indexado "+str(i)+" peli­culas")    

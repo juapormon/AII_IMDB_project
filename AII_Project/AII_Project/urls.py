@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from movies.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('imdb_scrape/', imdb_scrape, name="imdb_scrape"),
+    path('imdb_search/', imdb_search, name="imdb_search"),
+    path('imdb_search_title/', imdb_search_title, name="imdb_search_title"),
+    path('imdb_search_year/', imdb_search_year, name="imdb_search_year"),
+    path('imdb_search_rating/', imdb_search_rating, name="imdb_search_rating"),
+    path('imdb_search_all/', imdb_search_all, name="imdb_search_all"),
 ]
